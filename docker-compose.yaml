@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+
+  adminer:
+    image: adminer:latest
+    restart: always
+    ports:
+      - "8080:8080"
+
+  db:
+    image: mariadb:latest
+    container_name: mariadb
+    command: --init-file /data/application/init.sql
+    volumes:
+      - ./init.sql:/data/application/init.sql
+    ports:
+      - "8081:3306"
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: joker123
+      MARIADB_DATABASE: SHOP
+
