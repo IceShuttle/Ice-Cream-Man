@@ -4,6 +4,7 @@ services:
 
   adminer:
     image: adminer:latest
+    container_name: db-admin
     restart: always
     ports:
       - "8080:8080"
@@ -11,12 +12,13 @@ services:
   db:
     image: mariadb:latest
     container_name: mariadb
+    restart: always
     command: --init-file /data/application/init.sql
     volumes:
       - ./init.sql:/data/application/init.sql
+      - ./db-data:/var/lib/mysql
     ports:
       - "8081:3306"
-    restart: always
     environment:
       MARIADB_ROOT_PASSWORD: secret
       MARIADB_DATABASE: SHOP
