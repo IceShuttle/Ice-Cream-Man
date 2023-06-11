@@ -17,14 +17,9 @@ def connect_db(user,secret,host="localhost",port="8081"):
     try: 
         connection = connector.connect(**conn_params)
         cursor = connection.cursor()
-        is_connected=True
-        if 'cursor' not in st.session_state:
-            st.session_state['cursor'] = cursor
-        if 'connection' not in st.session_state:
-            st.session_state['connection'] = connection
-        if 'is_connected' not in st.session_state:
-            st.session_state['is_connected'] = is_connected
-
+        st.session_state['cursor'] = cursor
+        st.session_state['connection'] = connection
+        st.session_state['is_connected'] = True
 
     except connector.Error as err:
         st.session_state['is_connected'] = False
@@ -32,13 +27,12 @@ def connect_db(user,secret,host="localhost",port="8081"):
 
 
 def disconnect():
-    if 'is_connected' in st.session_state and st.session_state['is_connected']==False:
-        st.error("Already Logged Out")
-        return
-    try:
+    if 'is_connected' in st.session_state and st.session_state['is_connected']:
         st.session_state['cursor'].close()
         st.session_state['connection'].close()
         st.session_state['is_connected'] = False
         st.success("Logged Out")
-    except:
+    else:
         st.error("Already Logged Out")
+        return
+
