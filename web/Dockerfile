@@ -5,5 +5,5 @@ RUN pip install pipenv
 COPY Pipfile* ./
 RUN pipenv install --system --deploy --ignore-pipfile
 COPY . .
-CMD ["pipenv","run","streamlit","run","./main.py"]
+CMD ["pipenv","run","streamlit","run","./LoginPage.py"]
 

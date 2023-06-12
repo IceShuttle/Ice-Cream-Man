@@ -24,10 +24,10 @@ services:
       MARIADB_DATABASE: SHOP
 
   web:
-    build: ./web/
+    build: ./web
     container_name: web_interface
     restart: always
-    command: pipenv run streamlit run main.py
+    command: pipenv run streamlit run LoginPage.py
     ports:
       - "8082:8501"
     depends_on:

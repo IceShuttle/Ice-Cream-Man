@@ -40,6 +40,11 @@ def get_cursor():
     if  "cursor" in st.session_state:
         return st.session_state['cursor']
 
+def get_connection():
+    if  "connection" in st.session_state:
+        return st.session_state['connection']
+
+
 def is_connected():
     if 'is_connected' in st.session_state and st.session_state['is_connected']:
         return True

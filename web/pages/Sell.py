@@ -10,9 +10,10 @@ if "order" not in st.session_state:
     st.session_state["order"] = []
 
 cursor.execute("SELECT ORDER_ID FROM ORDERS ORDER BY ORDER_ID DESC LIMIT 1")
-order_no = 0
+order_no = 1
 try:
-    order_no = int(cursor.fetchone()) + 1
+    order_no = int(cursor.fetchone()[0]) + 1
+    print(order_no)
 except:
     pass
 
@@ -36,7 +37,42 @@ if st.button("Add Item"):
     id = item.split()[0]
     st.session_state["order"].append([order_no,id,quantity])
 
-if st.button("Get Bill"):
-    st.session_state["order"].append([name,ph_no,datetime.today().strftime("%Y/%m/%d")])
-    st.write(str(st.session_state["order"]))
+if st.button("Remove Last Item"):
+    st.session_state["order"].pop()
+
+## Bill Generation
+def perform_billing():
+    bill = ["The Bill"]
+    order = st.session_state["order"].copy()
+    details = order.pop()
+    bill.append(f"Item Price Quantity Total")
+    sum = 0
+    for i in order:
+        cursor.execute(f"SELECT ITEM_NAME,SP FROM ITEMS WHERE ID={i[1]}")
+        q = cursor.fetchone()
+        total = q[1]*i[2]
+        sum+=total
+        bill.append(f"{q[0]}'\t'{q[1]}'\t'{i[2]}'\t'{total}")
+        
+    bill.append("Total Payable      "+str(sum))
+    bill_print = '\n'.join(bill)
+    print(bill_print)
+    cursor.execute(f"INSERT INTO ORDERS(CUSTOMER_NAME,CUSTOMER_NO,ORDER_DATE,AMOUNT) VALUES\
+    (\"{details[0]}\",{details[1]},\"{details[2]}\",{sum})")
+    conn = db.get_connection()
+    conn.commit()
+
+    for i in order:
+        cursor.execute(f"INSERT INTO ORDER_ITEMS(ORDER_ID,ID,Quantity) VALUES\
+        ({i[0]},{i[1]},{i[2]})")
+
+    conn.commit()
+    st.session_state["order"]=[]
+ 
+if st.button("Confirm Order"):
+    st.session_state["order"].append([name,ph_no,datetime.today().strftime("%Y-%m-%d")])
+    perform_billing()
+
+if st.button("Cancell Order"):
+    st.session_state["order"]=[]
 
