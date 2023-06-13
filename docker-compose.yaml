@@ -30,6 +30,8 @@ services:
     command: pipenv run streamlit run LoginPage.py
     ports:
       - "8082:8501"
+    volumes:
+      - ./bills:./bills
     depends_on:
       - db
 

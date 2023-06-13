@@ -17,6 +17,7 @@ try:
 except:
     pass
 
+## Getting Info
 name = st.text_input("Customer's Name")
 ph_no = st.text_input("Customer's Phone Number")
 
@@ -32,14 +33,6 @@ st.write("Select Item")
 item = st.selectbox("Please Select one of the following items",items)
 
 quantity = st.number_input("Quantity",value=1,step=1)
-
-if st.button("Add Item"):
-    id = item.split()[0]
-    st.session_state["order"].append([order_no,id,quantity])
-
-if st.button("Remove Last Item"):
-    st.session_state["order"].pop()
-
 ## Bill Generation
 def perform_billing():
     bill = ["The Bill"]
@@ -69,10 +62,19 @@ def perform_billing():
     conn.commit()
     st.session_state["order"]=[]
  
-if st.button("Confirm Order"):
-    st.session_state["order"].append([name,ph_no,datetime.today().strftime("%Y-%m-%d")])
-    perform_billing()
+def add_buttons():
+    if st.button("Add Item"):
+        id = item.split()[0]
+        st.session_state["order"].append([order_no,id,quantity])
 
-if st.button("Cancell Order"):
-    st.session_state["order"]=[]
+    if st.button("Remove Last Item"):
+        st.session_state["order"].pop()
 
+    if st.button("Confirm Order"):
+        st.session_state["order"].append([name,ph_no,datetime.today().strftime("%Y-%m-%d")])
+        perform_billing()
+
+    if st.button("Cancell Order"):
+        st.session_state["order"]=[]
+
+add_buttons()
