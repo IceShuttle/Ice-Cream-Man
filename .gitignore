@@ -1,3 +1,2 @@
-db-data/**
-bills/**
-web/bills/**
+backend/db-data/**
+backend/bills/**

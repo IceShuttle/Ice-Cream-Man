@@ -1,7 +1,7 @@
+from datetime import datetime
 import streamlit as st
 import pandas as pd
 import db
-from datetime import datetime
 
 st.title("Sale")
 
