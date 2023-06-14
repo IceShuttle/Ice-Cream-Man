@@ -15,7 +15,8 @@ try:
     cursor.execute("SELECT ORDER_ID FROM ORDERS ORDER BY ORDER_ID DESC LIMIT 1")
     order_no = int(cursor.fetchone()[0]) + 1
 except:
-    st.error("Please Login")
+    if not cursor:
+        st.error("Please Login")
 
 ## Getting Info
 name = st.text_input("Customer's Name")
