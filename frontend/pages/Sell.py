@@ -85,7 +85,11 @@ def add_buttons():
             st.error("Nothing in the Order")
 
     if st.button("Cancel Order"):
-        st.session_state["order"]=[]
+        if order:
+            st.session_state["order"]=[]
+        else:
+            st.error("Nothing in the Order")
+
 
 def show_order():
     order = st.session_state["order"]
