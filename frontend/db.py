@@ -44,6 +44,29 @@ def get_connection():
     if  "connection" in st.session_state:
         return st.session_state['connection']
 
+def add_items(id,quantity):
+    cursor=get_cursor()
+    cursor.execute(f"SELECT QUANTITY FROM ITEMS WHERE ID={id}")
+    row = cursor.fetchone()
+    final_quantity = row[0] + quantity
+    cursor.execute(f"UPDATE ITEMS SET QUANTITY = {final_quantity} WHERE ID={id}")
+    get_connection().commit()
+
+def remove_items(id,quantity):
+    cursor=get_cursor()
+    cursor.execute(f"SELECT QUANTITY FROM ITEMS WHERE ID={id}")
+    row = cursor.fetchone()
+    final_quantity = row[0] - quantity
+    cursor.execute(f"UPDATE ITEMS SET QUANTITY = {final_quantity} WHERE ID={id}")
+    get_connection().commit()
+
+def get_items():
+    cursor=get_cursor()
+    cursor.execute("SELECT ID,ITEM_NAME FROM ITEMS;")
+    items = cursor.fetchall()
+    for i,v in enumerate(items):
+        items[i] = str(v[0])+" ) "+str(v[1])
+    return items
 
 def is_connected():
     if 'is_connected' in st.session_state and st.session_state['is_connected']:

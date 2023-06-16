@@ -22,24 +22,24 @@ except:
 name = st.text_input("Customer's Name")
 ph_no = st.text_input("Customer's Phone Number")
 
-def get_items():
-    global cursor,items
-    cursor.execute("SELECT ID,ITEM_NAME FROM ITEMS;")
-    items = cursor.fetchall()
-    for i,v in enumerate(items):
-        items[i] = str(v[0])+" ) "+str(v[1])
-
-get_items()
+items = db.get_items()
 st.write("Select Item")
 item = st.selectbox("Please Select one of the following items",items)
 
 quantity = st.number_input("Quantity",step=1,min_value=1)
+
+
+
+
+
 ## Bill Generation
 def perform_billing():
     bill = ["The Bill"]
     order = st.session_state["order"].copy()
     details = order.pop()
     bill.append(f"Item Price Quantity Total")
+
+    # Getting Names and prices
     sum = 0
     for i in order:
         cursor.execute(f"SELECT ITEM_NAME,SP FROM ITEMS WHERE ID={i[1]}")
@@ -57,6 +57,7 @@ def perform_billing():
     for i in order:
         cursor.execute(f"INSERT INTO ORDER_ITEMS(ORDER_ID,ID,Quantity) VALUES\
         ({i[0]},{i[1]},{i[2]})")
+        db.remove_items(i[1],i[2])
 
     conn.commit()
 
@@ -65,6 +66,10 @@ def perform_billing():
 
     st.session_state["order"]=[]
  
+
+
+
+
 def add_buttons():
     order = st.session_state["order"]
     if st.button("Add Item"):
