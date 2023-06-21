@@ -10,13 +10,7 @@ items = []
 if "order" not in st.session_state:
     st.session_state["order"] = []
 
-order_no = 1
-try:
-    cursor.execute("SELECT ORDER_ID FROM ORDERS ORDER BY ORDER_ID DESC LIMIT 1")
-    order_no = int(cursor.fetchone()[0]) + 1
-except:
-    if not cursor:
-        st.error("Please Login")
+order_no = db.get_total_orders() + 1
 
 ## Getting Info
 name = st.text_input("Customer's Name")
@@ -29,9 +23,6 @@ item = st.selectbox("Please Select one of the following items",items)
 quantity = st.number_input("Quantity",step=1,min_value=1)
 
 
-
-
-
 ## Bill Generation
 def perform_billing():
     bill = ["The Bill"]
@@ -40,17 +31,17 @@ def perform_billing():
     bill.append(f"Item Price Quantity Total")
 
     # Getting Names and prices
-    sum = 0
+    bill_ammount = 0
     for i in order:
         cursor.execute(f"SELECT ITEM_NAME,SP FROM ITEMS WHERE ID={i[1]}")
         q = cursor.fetchone()
         total = q[1]*i[2]
-        sum+=total
+        bill_ammount+=total
         bill.append(f"{q[0]}'\t'{q[1]}'\t'{i[2]}'\t'{total}")
         
-    bill.append("Total Payable      "+str(sum))
+    bill.append("Total Payable      "+str(bill_ammount))
     cursor.execute(f"INSERT INTO ORDERS(CUSTOMER_NAME,CUSTOMER_NO,ORDER_DATE,AMOUNT) VALUES\
-    (\"{details[0]}\",\"{details[1]}\",\"{details[2]}\",{sum})")
+    (\"{details[0]}\",\"{details[1]}\",\"{details[2]}\",{bill_ammount})")
     conn = db.get_connection()
     conn.commit()
 
@@ -60,14 +51,7 @@ def perform_billing():
         db.remove_items(i[1],i[2])
 
     conn.commit()
-
-    bill_print = '\n'.join(bill)
-    print(bill_print)
-
     st.session_state["order"]=[]
- 
-
-
 
 
 def add_buttons():

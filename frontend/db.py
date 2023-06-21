@@ -74,3 +74,15 @@ def is_connected():
     else:
         return False
 
+def get_total_orders():
+    cursor=get_cursor()
+    order_no = 0
+    try:
+        cursor.execute("SELECT ORDER_ID FROM ORDERS ORDER BY ORDER_ID DESC LIMIT 1")
+        order_no = int(cursor.fetchone()[0])
+    except:
+        if not cursor:
+            st.error("Please Login")
+    return order_no
+
+
