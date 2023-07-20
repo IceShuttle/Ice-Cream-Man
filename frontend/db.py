@@ -2,14 +2,14 @@ from mysql import connector
 import streamlit as st
 
 
-def connect_db(user,secret,host="localhost",port="8081"):
+def connect_db(user,passwd,host="localhost",port="8081"):
     if is_connected():
         st.error("Already Connected Please Log Out")
         return
 
     conn_params = {
         "user":user,
-        "password":secret,
+        "password":passwd,
         "host":host,
         "port":port,
         "database":"SHOP"
