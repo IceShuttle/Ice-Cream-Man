@@ -10,7 +10,7 @@ def login():
 
     if st.button("Login"):
         db.connect_db(username,password)
-        if st.session_state['is_connected']:
+        if db.is_connected():
             st.success("Logged in!")
         else:
             st.error("Invalid username or password")
