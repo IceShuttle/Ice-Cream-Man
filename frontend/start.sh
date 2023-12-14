@@ -1,5 +1,4 @@
 #!/bin/bash
-if [ ! -e /usr/bin/pipenv ]; then
-  sudo apt-get install pipenv -y
-fi
-pipenv run streamlit run LoginPage.py
+source .direnv/python-3.11.2/bin/activate
+pip install -r requirements.txt
+streamlit run LoginPage.py
