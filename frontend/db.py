@@ -69,8 +69,8 @@ def get_items():
     return items
 
 def is_connected():
-    if 'is_connected' in st.session_state and st.session_state['is_connected']:
-        return True
+    if 'is_connected' in st.session_state:
+        return st.session_state['is_connected']
     else:
         return False
 
