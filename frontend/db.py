@@ -44,7 +44,7 @@ def get_connection():
     if  "connection" in st.session_state:
         return st.session_state['connection']
 
-def add_items(id,quantity):
+def add_item(id,quantity):
     cursor=get_cursor()
     cursor.execute(f"SELECT QUANTITY FROM ITEMS WHERE ID={id}")
     row = cursor.fetchone()
@@ -52,7 +52,7 @@ def add_items(id,quantity):
     cursor.execute(f"UPDATE ITEMS SET QUANTITY = {final_quantity} WHERE ID={id}")
     get_connection().commit()
 
-def remove_items(id,quantity):
+def remove_item(id,quantity):
     cursor=get_cursor()
     cursor.execute(f"SELECT QUANTITY FROM ITEMS WHERE ID={id}")
     row = cursor.fetchone()

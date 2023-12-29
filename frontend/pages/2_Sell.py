@@ -48,7 +48,7 @@ def perform_billing():
     for i in order:
         cursor.execute(f"INSERT INTO ORDER_ITEMS(ORDER_ID,ID,Quantity) VALUES\
         ({i[0]},{i[1]},{i[2]})")
-        db.remove_items(i[1],i[2])
+        db.remove_item(i[1],i[2])
 
     conn.commit()
     st.session_state["order"]=[]

@@ -25,7 +25,7 @@ def add_buttons():
     if st.button("Confirm Added Stock"):
         if st.session_state["added_stock"]:
             for i in st.session_state["added_stock"]:
-                db.add_items(i[0],i[1])
+                db.add_item(i[0],i[1])
             st.session_state["added_stock"] = []
             st.success("Items Added to Inventory")
         else:
